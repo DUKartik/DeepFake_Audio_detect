@@ -1,0 +1,29 @@
+# ── Web & API ────────────────────────────────────────────────────────────────
+fastapi              # Webhook server and API
+uvicorn[standard]    # ASGI server to run FastAPI
+httpx                # Async/sync HTTP client for WhatsApp Cloud API
+pydantic             # Data validation and BaseSettings config
+pydantic-settings    # Standard extension for BaseSettings in Pydantic v2
+
+# ── Task Queue ───────────────────────────────────────────────────────────────
+celery               # Background task processing
+redis                # Python Redis client (Celery broker + rate limiter)
+
+# ── ML & Audio Processing ────────────────────────────────────────────────────
+torch                # PyTorch for AASIST and XLS-R inference
+torchaudio           # Audio loading and resampling
+transformers         # HuggingFace: Wav2Vec2Model, AutoFeatureExtractor, XLS-R
+librosa              # Audio feature extraction and phase analysis
+numpy                # Array manipulations for ensemble scoring
+scikit-learn         # cosine_similarity for wav2vec2 anomaly scoring
+datasets             # HuggingFace datasets: Kathbath, IndicTTS for fine-tuning
+soundfile            # WAV read/write for MetaDetector waveform checks
+
+# ── Storage & Logging ────────────────────────────────────────────────────────
+boto3                # S3-compatible client for Cloudflare R2 audit logs
+structlog            # Structured JSON logging with bound context
+
+# ── Testing (Development) ────────────────────────────────────────────────────
+pytest               # Unit and integration test runner
+pytest-asyncio       # Async test support for FastAPI webhook tests
+httpx                # Also used by TestClient in tests

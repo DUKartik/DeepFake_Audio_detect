@@ -1,0 +1,64 @@
+# render.yaml — Deploy both webhook and Celery worker on Render.com free tier
+
+services:
+  # ── Webhook API Server ──────────────────────────────────────────────────────
+  - type: web
+    name: verivoice-webhook
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn webhook.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: WA_TOKEN
+        sync: false
+      - key: PHONE_NUMBER_ID
+        sync: false
+      - key: VERIFY_TOKEN
+        sync: false
+      - key: APP_SECRET
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: R2_BUCKET
+        sync: false
+      - key: R2_ENDPOINT_URL
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: USE_GPU
+        value: "false"     # Render.com free tier is CPU-only
+
+  # ── Celery Worker ───────────────────────────────────────────────────────────
+  - type: worker
+    name: verivoice-worker
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A processor.tasks worker --loglevel=info --concurrency=1
+    envVars:
+      - key: WA_TOKEN
+        sync: false
+      - key: PHONE_NUMBER_ID
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: APP_SECRET
+        sync: false
+      - key: AASIST_MODEL_PATH
+        value: "./weights/AASIST.pth"
+      - key: R2_BUCKET
+        sync: false
+      - key: R2_ENDPOINT_URL
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: USE_GPU
+        value: "false"     # Render.com free tier is CPU-only
+      - key: TMP_DIR
+        value: "/tmp/verivoice"
