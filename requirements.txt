@@ -18,6 +18,7 @@ numpy                # Array manipulations for ensemble scoring
 scikit-learn         # cosine_similarity for wav2vec2 anomaly scoring
 datasets             # HuggingFace datasets: Kathbath, IndicTTS for fine-tuning
 soundfile            # WAV read/write for MetaDetector waveform checks
+torchcodec
 
 # ── Storage & Logging ────────────────────────────────────────────────────────
 boto3                # S3-compatible client for Cloudflare R2 audit logs

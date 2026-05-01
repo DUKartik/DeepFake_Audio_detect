@@ -4,9 +4,10 @@ Download AASIST weights before running the system:
 
 ## Option A — Original AASIST (English, CPU)
 ```bash
-# Clone the official repo and copy the pretrained weights
-git clone https://github.com/clovaai/aasist
-cp aasist/pretrained/AASIST.pth ./AASIST.pth
+# Clone the official repo and copy the pretrained weights and model architecture
+git clone https://github.com/clovaai/aasist /tmp/aasist
+cp /tmp/aasist/models/weights/AASIST.pth ./weights/AASIST.pth
+cp /tmp/aasist/models/AASIST.py ./models/AASIST.py
 ```
 
 ## Option B — Pre-fine-tuned deepfake XLS-R (HuggingFace)

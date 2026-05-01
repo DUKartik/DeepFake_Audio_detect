@@ -50,7 +50,18 @@ class AASISTDetector:
                 "Download from github.com/clovaai/aasist → pretrained/AASIST.pth"
             )
         try:
-            self.model = torch.load(str(path), map_location="cpu", weights_only=False)
+            from models.AASIST import Model
+            d_args = {
+                "architecture": "AASIST",
+                "nb_samp": 64600,
+                "first_conv": 128,
+                "filts": [70, [1, 32], [32, 32], [32, 64], [64, 64]],
+                "gat_dims": [64, 32],
+                "pool_ratios": [0.5, 0.7, 0.5, 0.5],
+                "temperatures": [2.0, 2.0, 100.0, 100.0]
+            }
+            self.model = Model(d_args)
+            self.model.load_state_dict(torch.load(str(path), map_location="cpu", weights_only=False))
             self.model.eval()
         except Exception as exc:
             raise ModelLoadError(f"Failed to load AASIST model: {exc}") from exc
@@ -76,10 +87,12 @@ class AASISTDetector:
             waveform, sr = torchaudio.load(wav_path)
             if sr != 16000:
                 waveform = torchaudio.transforms.Resample(orig_freq=sr, new_freq=16000)(waveform)
+            if waveform.shape[0] > 1:
+                waveform = waveform.mean(dim=0, keepdim=True)
 
             with torch.no_grad():
-                output = self.model(waveform)
-                score = torch.sigmoid(output).item()
+                _, output = self.model(waveform)
+                score = torch.sigmoid(output[:, 1]).item()
 
         except Exception as exc:
             raise InferenceError(f"AASIST inference failed: {exc}") from exc

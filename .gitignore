@@ -1,5 +1,6 @@
 .env
-venv/
+.venv/
+.venv
 __pycache__/
 *.pyc
 *.pyo
@@ -11,9 +12,9 @@ build/
 .eggs/
 
 # Model weights (large binary files — download separately)
-weights/*.pth
-weights/*.pt
-weights/*.onnx
+*.pth
+*.pt
+*.onnx
 
 # Temp / runtime
 /tmp/
