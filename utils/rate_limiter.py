@@ -33,7 +33,9 @@ class RateLimiter:
     """
 
     def __init__(self, redis_url: str, daily_limit: int = 10) -> None:
-        self._redis = redis.from_url(redis_url, decode_responses=True)
+        # Kombu requires CERT_NONE in the URL, but redis-py requires lowercase 'none'
+        fixed_url = redis_url.replace("CERT_NONE", "none")
+        self._redis = redis.from_url(fixed_url, decode_responses=True)
         self.daily_limit = daily_limit
 
     def _key(self, sender_hash: str) -> str:

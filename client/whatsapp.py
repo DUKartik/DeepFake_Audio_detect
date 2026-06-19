@@ -43,8 +43,7 @@ VERDICTS = {
 }
 
 FOOTER = (
-    "\n\n_Reply STOP to unsubscribe. Automated analysis only.\n"
-    "Visit {fact_checker} for verification._"
+    "\n\n_Reply STOP to unsubscribe. Automated analysis only._"
 )
 
 ELECTORAL_DISCLAIMER = (
@@ -202,8 +201,8 @@ class WhatsAppClient:
             flags_str = ", ".join(meta_flags)
             body += f"\n\n_Technical flags: {flags_str}_"
 
-        # Footer with opt-out and fact-checker link
-        body += FOOTER.format(fact_checker=self.fact_checker_url)
+        # Footer with opt-out
+        body += FOOTER
 
         # Electoral disclaimer (mandatory during election periods)
         if electoral_period:
@@ -244,6 +243,6 @@ class WhatsAppClient:
             "⚠️ *Audio too short for reliable analysis*\n\n"
             "Clips under 3 seconds produce unreliable results.\n"
             "Please send a longer clip.\n\n"
-            f"_Reply STOP to unsubscribe. {self.fact_checker_url}_"
+            "_Reply STOP to unsubscribe._"
         )
         return self.send_message(to, text)

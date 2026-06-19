@@ -191,7 +191,8 @@ def process_audio(self, media_id: str, sender: str) -> dict:
         # ── Step 5 & 6: Run detectors + ensemble ──────────────────────────
         log.info("running_detectors", device=registry.device())
         meta_detector = registry.get("meta")
-        meta_result = meta_detector.analyse(wav_path)
+        # Run meta_detector on the RAW downloaded file (ogg_path) to preserve original metadata
+        meta_result = meta_detector.analyse(ogg_path)
 
         if registry.device() == "cuda":
             # GPU path: XLS-R + AASIST + phase

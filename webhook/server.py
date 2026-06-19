@@ -129,6 +129,27 @@ async def receive(request: Request) -> dict:
                 media_id=media_id,
             )
             process_audio.delay(media_id, sender)
+        elif msg_type == "document":
+            doc = msg.get("document", {})
+            mime_type = doc.get("mime_type", "").lower()
+            filename = doc.get("filename", "").lower()
+            
+            is_audio = (
+                mime_type.startswith("audio/") or 
+                mime_type in ["application/ogg", "video/mp4"] or 
+                filename.endswith((".wav", ".mp3", ".ogg", ".m4a", ".aac", ".flac", ".wma"))
+            )
+            
+            if is_audio:
+                media_id: str = doc["id"]
+                log.info(
+                    "document_audio_received",
+                    sender=sender[:6] + "***",
+                    media_id=media_id,
+                )
+                process_audio.delay(media_id, sender)
+            else:
+                log.debug("non_audio_document_ignored", mime_type=mime_type, filename=filename)
         else:
             log.debug("non_audio_message_ignored", msg_type=msg_type)
 
