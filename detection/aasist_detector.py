@@ -84,7 +84,12 @@ class AASISTDetector:
         """
         t0 = time.time()
         try:
-            waveform, sr = torchaudio.load(wav_path)
+            import soundfile as sf
+            wav_data, sr = sf.read(wav_path)
+            if wav_data.ndim == 1:
+                waveform = torch.from_numpy(wav_data).unsqueeze(0).float()
+            else:
+                waveform = torch.from_numpy(wav_data).t().float()
             if sr != 16000:
                 waveform = torchaudio.transforms.Resample(orig_freq=sr, new_freq=16000)(waveform)
             if waveform.shape[0] > 1:
